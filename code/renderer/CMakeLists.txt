@@ -17,7 +17,7 @@ set(renderer_SOURCES
     )
 
 
-add_library(${PROJECT_NAME} SHARED ${renderer_SOURCES} ${renderer_HEADERS})
+add_library(${PROJECT_NAME} ${POLYFIT_LIB_TYPE} ${renderer_SOURCES} ${renderer_HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
                       FOLDER "PolyFit")
 
