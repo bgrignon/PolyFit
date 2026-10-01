@@ -29,10 +29,16 @@ int main(int argc, char **argv)
     // initialize the logger (this is not optional)
     Logger::initialize();
 
-    // input point cloud file name
-    const std::string input_file = (argc > 1) ? argv[1] : std::string(POLYFIT_ROOT_DIR) + "/data/toy_data.bvg";
-    // output mesh file name
-    const std::string output_file = (argc > 2) ? argv[2] : std::string(POLYFIT_ROOT_DIR) + "/data/toy_data-result.obj";
+    if (argc > 2) {
+        // input point cloud file name
+        const std::string input_file = argv[1];
+        // output mesh file name
+        const std::string output_file = argv[2];
+    }
+    else {
+        std::cout << "Not enough arguments, specify input and output files" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     // load point cloud from file
     PointSet* point_cloud = PointSetIO::read(input_file);
@@ -64,6 +70,7 @@ int main(int argc, char **argv)
     std::cout << "optimization..." << std::endl;
     FaceSelection selector(point_cloud, mesh);
 
+    // parameters = weights : data_fitting, model_coverage, model_complexity
 #ifdef HAS_GUROBI
     selector.optimize(&hypothesis, LinearProgramSolver::GUROBI, 0.43, 0.27, 0.3);           // <--- tune if necessary
 #else
